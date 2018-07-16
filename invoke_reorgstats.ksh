@@ -24,7 +24,7 @@ output_dir=${dir}/${instance}_${dbname}
 LOGFILE=${dir}/invoke_reorgstats_${instance}_${dbname}.log
 
 ## GET RID OF THE PREVIOUS LOG FILE ##
-rm -f ${LOGFILE}
+
 
 
 # Redirect STDOUT and STDERR to the logfile and the screen
