@@ -1,22 +1,10 @@
-DDL for
 
-------------------------------------------------
--- Add column CLIENT_SUB_TYPE_CD to TOPDM.CUSTOMER
-------------------------------------------------
-alter table TOPDM.CUSTOMER add column CLIENT_SUB_TYPE_CD char(2) not null default '';
-CREATE OR REPLACE VIEW TOPDM.CUSTOMER_V AS SELECT * FROM TOPDM.CUSTOMER; 
-CREATE OR REPLACE VIEW TOPDM.CUSTOMER_ADHOC_V AS SELECT * FROM TOPDM.CUSTOMER; 
-
-commit;
------------------------------------------------
------------------------------------------------
------------------------------------------------
  Recommendation 	Statement Number 	Statement
 2 	1 	RUNSTATS ON TABLE "FRS"."R_PLAN_CYCLE_MASTER" ON COLUMNS ( "YEAR_CYCLE_DIM_UID" , "ACCT_YEAR" , "PLAN_CYCLE" ) AND INDEXES ALL ALLOW WRITE ACCESS UTIL_IMPACT_PRIORITY 50
 2 	2 	RUNSTATS ON TABLE "TOPT"."JOB_ROLE" WITH DISTRIBUTION ON COLUMNS ( "YEAR_CYCLE_DIM_UID" NUM_FREQVALUES 10 NUM_QUANTILES 20 ) AND SAMPLED DETAILED INDEXES ALL ALLOW WRITE ACCESS UTIL_IMPACT_PRIORITY 50
 2 	3 	RUNSTATS ON TABLE "FRS"."RESOURCE_CYCLE" ON COLUMNS ( "ACTIVE_INDC" ) WITH DISTRIBUTION ON COLUMNS ( "ACCT_YEAR" NUM_FREQVALUES 10 NUM_QUANTILES 20 , "PLAN_CYCLE" NUM_FREQVALUES 10 NUM_QUANTILES 20 , "RESOURCE_EMPLOYEE_UID" NUM_FREQVALUES 10 NUM_QUANTILES 20 ) AND SAMPLED DETAILED INDEXES ALL ALLOW WRITE ACCESS UTIL_IMPACT_PRIORITY 50
-2 	4 	RUNSTATS ON TABLE "FRS"."RESOURCE_PLAN" WITH DISTRIBUTION ON COLUMNS ( "ACCT_YEAR" NUM_FREQVALUES 10 NUM_QUANTILES 20 , "PLAN_CYCLE" NUM_FREQVALUES 10 NUM_QUANTILES 20 , "RESOURCE_EMPLOYEE_UID" NUM_FREQVALUES 10 NUM_QUANTILES 20 ) AND SAMPLED DETAILED INDEXES ALL ALLOW WRITE ACCESS UTIL_IMPACT_PRIORITY 50
-2 	5 	RUNSTATS ON TABLE "FRS"."RESOURCE" ON COLUMNS ( "RESOURCE_EMPLOYEE_UID" ) AND SAMPLED DETAILED INDEXES ALL ALLOW WRITE ACCESS UTIL_IMPACT_PRIORITY 50
+2 	4 	RUNSTATS ON TABLE "FRS"."RESOURCE_PLAN" WITH DISTRIBUTION ON COLUMNS ( "ACCT_YEAR" NUM_FREQVALUES 10 NUM_QUANTILES 20 , "PLAN_CYCLE" NUM_FREQVALUES 10 NUM_QUANTILES 20 , "RESOURCE_EMPLOYEE_UID" NUM_FREQVALUES 10 NUM_QUANTILES 20 ) AND SAMPLED DETAILED INDEXES ALL ALLOW WRITE ACCESS
+2 	5 	RUNSTATS ON TABLE "FRS"."RESOURCE" ON COLUMNS ( "RESOURCE_EMPLOYEE_UID" ) AND SAMPLED DETAILED INDEXES ALL ALLOW WRITE ACCESS
 
 runstats on table CGSP.CUSTOMER_DETAIL_FACTS on all columns with distribution on all columns and indexes all;                                                                                                                                                                                                                                     
 runstats on table CGSP.DEDICATED_RESOURCE on all columns with distribution on all columns and indexes all;                                                                                                                                                                                                                                   
@@ -110,7 +98,7 @@ runstats on table FRS.FRST_R_GLB_BUYING_GROUP  on all columns with distribution 
 runstats on table FRS.SRT_DYNAMIC_ELEMENT_VALUE_DETAIL on all columns with distribution on all columns and indexes all;                                                                                                                                                                                                                            
 runstats on table FRS.FRST_R_GLB_CLIENT   on all columns with distribution on all columns and indexes all;                                                                                                                                                                                                                                         
 runstats on table FRS.SRT_INCENTIVE_ELEMENT on all columns with distribution on all columns and indexes all  ;                                                                                                                                                                                                                                     
-runstats on table FRS.FRST_R_GLB_ULT_CLIENT  on all columns with distribution on all columns and indexes all ;                                                                                                                                                                                                                                     
+                                                                                                                                                                                                                                   
 runstats on table FRS.TERRITORY_CHANGE_HISTORY   on all columns with distribution on all columns and indexes all ;                                                                                                                                                                                                                                 
 runstats on table FRS.FRST_R_SUB_CLIENT    on all columns with distribution on all columns and indexes all ;                                                                                                                                                                                                                                       
 runstats on table FRS.STATUS_LOOKUP   on all columns with distribution on all columns and indexes all;                                                                                                                                                                                                                                            
