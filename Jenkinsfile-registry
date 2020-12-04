@@ -3,8 +3,6 @@ pipeline {
     agent any
 
     environment {
-        harbor_id = credentials('harbor_id')
-        harbor_pw = credentials('harbor_pw')
         app_name = "myapp1"
         docker_repository="192.168.19.1:5000"
         k8s_cfg="--kubeconfig=/opt/k8s_config/config"
