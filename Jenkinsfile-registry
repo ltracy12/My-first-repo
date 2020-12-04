@@ -1,0 +1,62 @@
+pipeline {
+
+    agent any
+
+    environment {
+        harbor_id = credentials('harbor_id')
+        harbor_pw = credentials('harbor_pw')
+        app_name = "myapp1"
+        docker_repository="192.168.19.1:5000"
+        k8s_cfg="--kubeconfig=/opt/k8s_config/config"
+    }
+    
+    stages {
+
+        stage('Check system version') {
+            steps {
+                sh '''
+                    uname -a
+                    id
+                    pwd
+                    ls -la
+                '''
+            }
+        }//end stage
+
+        stage ('Build Docker image') {
+            steps{
+                sh '''
+                    alias docker="docker -H 192.168.19.1:2375"
+                    #docker login https://${docker_repository} -u $harbor_id -p $harbor_pw
+                    docker build -t ${docker_repository}/cicd-demo/myapp1 .
+                    docker images
+                    docker push ${docker_repository}/cicd-demo/myapp1
+                '''
+            }
+        }//end stage
+
+        stage ('Deploy to Kubernetes') {
+            steps {
+                withCredentials([file(credentialsId: 'k8s_cluster_config', variable: 'k8s_config')]) {
+                sh '''
+                    #
+                    mkdir -p /opt/k8s_config
+                    pwd
+                    #ls -l ${k8s_config}
+                    #cat ${k8s_config}
+                    cp ${k8s_config} /opt/k8s_config
+                    #
+                    alias kubectl="/usr/local/bin/kubectl"
+                    kubectl $k8s_cfg get pod
+                    #kubectl $k8s_cfg delete -f Deployment-registry.yaml
+                    sleep 15
+                    kubectl $k8s_cfg apply -f Deployment-registry.yaml
+                    kubectl $k8s_cfg rollout restart deployment myapp1
+                    sleep 15
+                    kubectl $k8s_cfg get pod
+                    '''
+                }
+          }
+        }//end stage
+    }
+}

@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp1
+  namespace: default
+  labels:
+    app: myapp1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp1
+  template:
+    metadata:
+      #for helm
+      #annotations:
+      #  rollme: {{ randAlphaNum 5 | quote }}
+      labels:
+        app: myapp1
+    spec:
+      containers:
+        - name: myapp1
+          #imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
+          image: "lelemao2010/myapp1:latest"
+          ports:
+          - protocol: TCP
+            containerPort: 80
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/bash","-c","echo pod name $(hostname), Node ${NODE_NAME}, create time $(date +%Y-%m-%d_%H:%M:%S) > /usr/share/nginx/html/index1.html"]
+          env: 
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+#      imagePullSecrets:
+#      - name: myapp1-harbor-secret
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: myapp1-harbor-secret
+  namespace: default
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: ewoJImF1dGhzIjogewoJCSIxOTIuMTY4LjE5LjExOjg0NDMiOiB7CgkJCSJhdXRoIjogIllXUnRhVzQ2U0dGeVltOXlNVEl6TkRVPSIKCQl9Cgl9LAoJIkh0dHBIZWFkZXJzIjogewoJCSJVc2VyLUFnZW50IjogIkRvY2tlci1DbGllbnQvMTkuMDMuMTMgKGxpbnV4KSIKCX0KfQ==
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp1
+  namespace: default
+spec: 
+  type: NodePort
+  selector:
+    app: myapp1
+  ports:
+    - protocol: TCP
+      port: 80
